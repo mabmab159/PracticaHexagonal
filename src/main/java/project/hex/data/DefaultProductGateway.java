@@ -51,7 +51,7 @@ public class DefaultProductGateway implements ProductGateway {
         return ProductEntity.builder()
                 .id(product.getId())
                 .nombre(product.getNombre())
-                .precio((long) product.getPrecio())
+                .precio(product.getPrecio())
                 .build();
     }
 }

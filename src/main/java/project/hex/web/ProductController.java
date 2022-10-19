@@ -54,7 +54,7 @@ public class ProductController {
     private static class ProductDTO {
         private Long id;
         private String nombre;
-        private double precio;
+        private Long precio;
     }
 
     @Data
@@ -62,7 +62,7 @@ public class ProductController {
     private static class ProductBasicDTO {
         private Long id;
         private String nombre;
-        private double precio;
+        private Long precio;
     }
 
     private ProductBasicDTO toDTOBasic(Product product) {
