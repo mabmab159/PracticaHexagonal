@@ -25,10 +25,19 @@ public class DefaultProductGateway implements ProductGateway {
 
     @Override
     public Product findById(Long id) {
-        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new RuntimeException("as"));
+        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
         return toModel(productEntity);
     }
 
+    @Override
+    public Product save(Product product) {
+        return toModel(productRepository.save(toEntity(product)));
+    }
+
+    public void deleteById(Long id) {
+        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+        productRepository.deleteById(productEntity.getId());
+    }
 
     private Product toModel(ProductEntity productEntity) {
         return Product.builder()

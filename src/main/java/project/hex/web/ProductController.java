@@ -4,11 +4,9 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.hex.domains.Product;
+import project.hex.domains.ProductGateway;
 import project.hex.domains.ProductService;
 
 import java.util.List;
@@ -35,6 +33,20 @@ public class ProductController {
         Product product = productService.findById(id);
         ProductDTO productDTO = toDTO(product);
         return ResponseEntity.ok().body(productDTO);
+    }
+
+    @PostMapping
+    private ResponseEntity<ProductDTO> save(@RequestBody ProductDTO productDTO) {
+        Product product = toModel(productDTO);
+        Product productSave = productService.save(product);
+        ProductDTO result = toDTO(productSave);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    private ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        productService.deletedById(id);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
     @Data

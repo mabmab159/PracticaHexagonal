@@ -20,4 +20,13 @@ public class ProductService {
     public Product findById(Long id) {
         return productGateway.findById(id);
     }
+
+    public Product save(Product product) {
+        return productGateway.save(product);
+    }
+
+    public void deletedById(Long id) {
+        productGateway.deleteById(id);
+    }
+
 }
