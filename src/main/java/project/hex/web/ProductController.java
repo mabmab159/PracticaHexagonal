@@ -23,7 +23,9 @@ public class ProductController {
     @GetMapping
     private ResponseEntity<List<ProductDTO>> getAllProduct() {
         List<Product> product = productService.findAll();
-        List<ProductDTO> productDTO = product.stream().map(p -> toDTO(p)).collect(Collectors.toList());
+        List<ProductDTO> productDTO = product.stream()
+                .map(p -> toDTO(p))
+                .collect(Collectors.toList());
         return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
 
@@ -31,7 +33,8 @@ public class ProductController {
     private ResponseEntity<ProductDTO> findProduct(@PathVariable Long id) {
         Product product = productService.findById(id);
         ProductDTO productDTO = toDTO(product);
-        return ResponseEntity.ok().body(productDTO);
+        return ResponseEntity.ok()
+                .body(productDTO);
     }
 
     @PostMapping
@@ -48,20 +51,10 @@ public class ProductController {
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
-    @Data
-    @Builder
-    private static class ProductDTO {
-        private Long id;
-        private String nombre;
-        private Long precio;
-    }
-
-    @Data
-    @Builder
-    private static class ProductBasicDTO {
-        private Long id;
-        private String nombre;
-        private Long precio;
+    @PutMapping("/{id}")
+    private ResponseEntity<ProductDTO> updateById(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
+        Product product = productService.updateById(id, toModel(productDTO));
+        return new ResponseEntity<>(toDTO(product), HttpStatus.OK);
     }
 
     private ProductBasicDTO toDTOBasic(Product product) {
@@ -86,5 +79,21 @@ public class ProductController {
                 .nombre(productDTO.getNombre())
                 .precio(productDTO.getPrecio())
                 .build();
+    }
+
+    @Data
+    @Builder
+    private static class ProductDTO {
+        private Long id;
+        private String nombre;
+        private Long precio;
+    }
+
+    @Data
+    @Builder
+    private static class ProductBasicDTO {
+        private Long id;
+        private String nombre;
+        private Long precio;
     }
 }

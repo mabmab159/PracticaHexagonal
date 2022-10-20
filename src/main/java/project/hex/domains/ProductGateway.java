@@ -10,4 +10,6 @@ public interface ProductGateway {
     Product save(Product product);
 
     void deleteById(Long id);
+
+    Product updateById(Long id, Product product);
 }

@@ -28,4 +28,8 @@ public class ProductService {
         productGateway.deleteById(id);
     }
 
+    public Product updateById(Long id, Product product) {
+        return productGateway.updateById(id, product);
+    }
+
 }

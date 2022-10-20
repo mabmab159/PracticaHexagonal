@@ -17,12 +17,16 @@ public class DefaultProductGateway implements ProductGateway {
 
     @Override
     public List<Product> findAll() {
-        return productRepository.findAll().stream().map(p -> toModel(p)).collect(Collectors.toList());
+        return productRepository.findAll()
+                .stream()
+                .map(p -> toModel(p))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Product findById(Long id) {
-        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+        ProductEntity productEntity = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
         return toModel(productEntity);
     }
 
@@ -31,9 +35,21 @@ public class DefaultProductGateway implements ProductGateway {
         return toModel(productRepository.save(toEntity(product)));
     }
 
+    @Override
     public void deleteById(Long id) {
-        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+        ProductEntity productEntity = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
         productRepository.deleteById(productEntity.getId());
+    }
+
+
+    public Product updateById(Long id, Product product) {
+        ProductEntity productEntity = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto " +
+                        "no encontrado"));
+        productEntity.setNombre(product.getNombre());
+        productEntity.setPrecio(product.getPrecio());
+        return toModel(productRepository.save(productEntity));
     }
 
     private Product toModel(ProductEntity productEntity) {
