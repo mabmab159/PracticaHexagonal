@@ -15,6 +15,7 @@ import project.hex.data.ProductEntity;
 import project.hex.data.ProductRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -48,6 +49,8 @@ public class ProductTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
+    //Insertar test para obtener un solo producto
+
     @Test
     public void saveProduct() throws Exception {
         ProductEntity productEntity = createProduct(1L, "nombre1", 1L);
@@ -62,6 +65,16 @@ public class ProductTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
+
+    //Insertar test de actualizar
+
+    @Test
+    public void deleteProduct() throws Exception {
+        when(productRepository.findById(1L)).thenReturn(Optional.of(createProduct(1L, "nombre1", 1L)));
+        mockMvc.perform(MockMvcRequestBuilders.delete("/product/1"))
+                .andExpect(status().isNoContent());
+    }
+
 
     private ProductEntity createProduct(Long id, String name, Long precio) {
         ProductEntity product = new ProductEntity();
