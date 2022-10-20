@@ -66,7 +66,19 @@ public class ProductTest {
                 .andExpect(status().isCreated());
     }
 
-    //Insertar test de actualizar
+    @Test
+    public void updateProduct() throws Exception {
+        when(productRepository.findById(1L)).thenReturn(Optional.of(createProduct(1L, "nombre1", 1L)));
+        when(productRepository.save(createProduct(1L, "nombre2", 2L))).thenReturn(createProduct(1L, "nombre2", 2L));
+        mockMvc.perform(MockMvcRequestBuilders.put("/product/1", createProduct(1l, "nombre2", 2L))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createProduct(1L, "nombre2", 2L))))
+                .andExpect(jsonPath("$.*", hasSize(3)))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.nombre", is("nombre2")))
+                .andExpect(jsonPath("$.precio", is(2)))
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void deleteProduct() throws Exception {
