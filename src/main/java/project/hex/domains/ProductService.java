@@ -12,7 +12,6 @@ public class ProductService {
         this.productGateway = productGateway;
     }
 
-
     public List<Product> findAll() {
         return productGateway.findAll();
     }

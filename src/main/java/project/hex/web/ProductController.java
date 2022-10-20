@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.hex.domains.Product;
-import project.hex.domains.ProductGateway;
 import project.hex.domains.ProductService;
 
 import java.util.List;

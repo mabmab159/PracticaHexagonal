@@ -3,15 +3,12 @@ package project.hex.data;
 import org.springframework.stereotype.Component;
 import project.hex.domains.Product;
 import project.hex.domains.ProductGateway;
-import project.hex.domains.ProductService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
 public class DefaultProductGateway implements ProductGateway {
-
     private final ProductRepository productRepository;
 
     public DefaultProductGateway(ProductRepository productRepository) {
