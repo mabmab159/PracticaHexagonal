@@ -36,7 +36,8 @@ public class ProductTest {
 
     @Test
     public void getAllProducts() throws Exception {
-        when(productRepository.findAll()).thenReturn(List.of(createProduct(1L, "nombre1", 1L), createProduct(2L, "nombre2", 2L)));
+        when(productRepository.findAll()).thenReturn(List.of(createProduct(1L, "nombre1", 1L),
+                createProduct(2L, "nombre2", 2L)));
         mockMvc.perform(MockMvcRequestBuilders.get("/product"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", hasSize(2)))
@@ -49,15 +50,24 @@ public class ProductTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
-    //Insertar test para obtener un solo producto
+    @Test
+    public void getOneProduct() throws Exception {
+        when(productRepository.findById(1L)).thenReturn(Optional.of(createProduct(1L, "nombre1", 1L)));
+        mockMvc.perform(MockMvcRequestBuilders.get("/product/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*", hasSize(3)))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.nombre", is("nombre1")))
+                .andExpect(jsonPath("$.precio", is(1)))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
 
     @Test
     public void saveProduct() throws Exception {
-        ProductEntity productEntity = createProduct(1L, "nombre1", 1L);
-        when(productRepository.save(createProduct(1L, "nombre1", 1L))).thenReturn(productEntity);
+        when(productRepository.save(createProduct(1L, "nombre1", 1L))).thenReturn(createProduct(1L, "nombre1", 1L));
         mockMvc.perform(MockMvcRequestBuilders.post("/product")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(productEntity)))
+                        .content(objectMapper.writeValueAsString(createProduct(1L, "nombre1", 1L))))
                 .andExpect(jsonPath("$.*", hasSize(3)))
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.nombre", is("nombre1")))
@@ -70,7 +80,7 @@ public class ProductTest {
     public void updateProduct() throws Exception {
         when(productRepository.findById(1L)).thenReturn(Optional.of(createProduct(1L, "nombre1", 1L)));
         when(productRepository.save(createProduct(1L, "nombre2", 2L))).thenReturn(createProduct(1L, "nombre2", 2L));
-        mockMvc.perform(MockMvcRequestBuilders.put("/product/1", createProduct(1l, "nombre2", 2L))
+        mockMvc.perform(MockMvcRequestBuilders.put("/product/1", createProduct(1L, "nombre2", 2L))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createProduct(1L, "nombre2", 2L))))
                 .andExpect(jsonPath("$.*", hasSize(3)))
