@@ -5,8 +5,8 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.hex.domains.Product;
-import project.hex.domains.ProductService;
+import project.hex.domains.Product.Product;
+import project.hex.domains.Product.ProductService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,14 +57,6 @@ public class ProductController {
         return new ResponseEntity<>(toDTO(product), HttpStatus.OK);
     }
 
-    private ProductBasicDTO toDTOBasic(Product product) {
-        return ProductBasicDTO.builder()
-                .id(product.getId())
-                .nombre(product.getNombre())
-                .precio(product.getPrecio())
-                .build();
-    }
-
     private ProductDTO toDTO(Product product) {
         return ProductDTO.builder()
                 .id(product.getId())
@@ -89,11 +81,4 @@ public class ProductController {
         private Long precio;
     }
 
-    @Data
-    @Builder
-    private static class ProductBasicDTO {
-        private Long id;
-        private String nombre;
-        private Long precio;
-    }
 }

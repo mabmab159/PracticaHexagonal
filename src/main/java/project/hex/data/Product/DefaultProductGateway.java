@@ -1,8 +1,8 @@
-package project.hex.data;
+package project.hex.data.Product;
 
 import org.springframework.stereotype.Component;
-import project.hex.domains.Product;
-import project.hex.domains.ProductGateway;
+import project.hex.domains.Product.Product;
+import project.hex.domains.Product.ProductGateway;
 
 import java.util.List;
 import java.util.stream.Collectors;

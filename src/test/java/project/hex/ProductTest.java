@@ -11,8 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import project.hex.data.ProductEntity;
-import project.hex.data.ProductRepository;
+import project.hex.data.Product.ProductEntity;
+import project.hex.data.Product.ProductRepository;
 
 import java.util.List;
 import java.util.Optional;

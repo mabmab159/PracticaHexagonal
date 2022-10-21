@@ -1,4 +1,4 @@
-package project.hex.domains;
+package project.hex.domains.Product;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package project.hex.data;
+package project.hex.data.Product;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package project.hex.domains;
+package project.hex.domains.Product;
 
 import java.util.List;
 

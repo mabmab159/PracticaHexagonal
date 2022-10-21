@@ -1,4 +1,4 @@
-package project.hex.domains;
+package project.hex.domains.Product;
 
 import org.springframework.stereotype.Service;
 
