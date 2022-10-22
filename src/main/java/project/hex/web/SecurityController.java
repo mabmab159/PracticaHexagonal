@@ -14,7 +14,11 @@ public class SecurityController extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/user")
                 .permitAll()
+                .antMatchers("/user/*")
+                .permitAll()
                 .anyRequest()
                 .authenticated();
     }
+
+
 }

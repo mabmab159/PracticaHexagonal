@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import project.hex.domains.User.User;
 import project.hex.domains.User.UserService;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +17,11 @@ import java.util.stream.Collectors;
 @RequestMapping("user")
 public class UserController {
     private final UserService userService;
+    private Token token;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, Token token) {
         this.userService = userService;
+        this.token = token;
     }
 
     @GetMapping
@@ -28,6 +31,12 @@ public class UserController {
                 .map(p -> toDTO(p))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping("/{usuario}")
+    @RolesAllowed("ROLE_EDITOR")
+    public String getUsuario(@PathVariable String usuario) {
+        return new Token().getJWTToken(usuario);
     }
 
     @PostMapping
