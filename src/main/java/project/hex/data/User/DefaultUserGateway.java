@@ -1,5 +1,6 @@
 package project.hex.data.User;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import project.hex.domains.User.User;
 import project.hex.domains.User.UserGateway;
@@ -26,7 +27,22 @@ public class DefaultUserGateway implements UserGateway {
 
     @Override
     public User save(User user) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPassword(encoder.encode(user.getPassword()));
         return toModel(userRepository.save(toEntity(user)));
+    }
+
+    @Override
+    public User editUser(Long id, User user) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no " +
+                        "encontrado"));
+        userEntity.setNombres(user.getNombre());
+        userEntity.setApellidos(user.getApellidos());
+        userEntity.setCorreo(user.getCorreo());
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        userEntity.setPassword(encoder.encode(user.getPassword()));
+        return toModel(userRepository.save(userEntity));
     }
 
     private User toModel(UserEntity userEntity) {

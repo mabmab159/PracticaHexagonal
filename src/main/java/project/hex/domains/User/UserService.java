@@ -19,4 +19,8 @@ public class UserService {
     public User save(User user) {
         return userGateway.save(user);
     }
+
+    public User editUser(Long id, User user) {
+        return userGateway.editUser(id, user);
+    }
 }

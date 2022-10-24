@@ -35,17 +35,26 @@ public class UserController {
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
 
-    @GetMapping("/{usuario}")
-    public String getUsuario(@PathVariable String usuario) {
-        return getJWTToken(usuario);
+    @GetMapping("/login")
+    public String getUsuario(@RequestParam("correo") String correo, @RequestParam("password") String password) {
+        List<User> usuarios = userService.findAll();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        for (User usuario : usuarios) {
+            if (usuario.getCorreo()
+                    .equals(correo) && encoder.matches(password, usuario.getPassword())) return getJWTToken(correo);
+        }
+        return "";
     }
 
     @PostMapping
     public ResponseEntity<UserDTO> save(@RequestBody UserDTO userDTO) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        userDTO.password = encoder.encode(userDTO.password);
         User user = userService.save(toModel(userDTO));
         return new ResponseEntity<>(toDTO(user), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> editUser(@RequestBody UserDTO userDTO, @PathVariable Long id) {
+        return new ResponseEntity<>(toDTO(userService.editUser(id, toModel(userDTO))), HttpStatus.OK);
     }
 
     private UserDTO toDTO(User user) {
@@ -70,22 +79,18 @@ public class UserController {
 
     private String getJWTToken(String username) {
         String secretKey = "mySecretKey";
-        List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-                .commaSeparatedStringToAuthorityList("ROLE_USER");
+        List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER");
 
-        String token = Jwts
-                .builder()
+        String token = Jwts.builder()
                 .setId("softtekJWT")
                 .setSubject(username)
-                .claim("authorities",
-                        grantedAuthorities.stream()
-                                .map(GrantedAuthority::getAuthority)
-                                .collect(Collectors.toList()))
+                .claim("authorities", grantedAuthorities.stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 // Token valido x 1 hora
                 .setExpiration(new Date(System.currentTimeMillis() + 3600000))
-                .signWith(SignatureAlgorithm.HS512,
-                        secretKey.getBytes())
+                .signWith(SignatureAlgorithm.HS512, secretKey.getBytes())
                 .compact();
 
         return "Bearer " + token;

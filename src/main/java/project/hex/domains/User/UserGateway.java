@@ -7,4 +7,6 @@ public interface UserGateway {
     List<User> findAll();
 
     User save(User user);
+
+    User editUser(Long id, User user);
 }

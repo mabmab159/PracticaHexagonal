@@ -22,6 +22,7 @@ public class ProductEntity {
     private Long id;
     private String nombre;
     private Long precio;
+    @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
