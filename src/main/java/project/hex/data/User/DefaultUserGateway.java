@@ -35,8 +35,7 @@ public class DefaultUserGateway implements UserGateway {
     @Override
     public User editUser(Long id, User user) {
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no " +
-                        "encontrado"));
+                .orElseThrow(() -> new RuntimeException("Producto no " + "encontrado"));
         userEntity.setNombres(user.getNombre());
         userEntity.setApellidos(user.getApellidos());
         userEntity.setCorreo(user.getCorreo());

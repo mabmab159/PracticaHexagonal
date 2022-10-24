@@ -45,8 +45,7 @@ public class DefaultProductGateway implements ProductGateway {
 
     public Product updateById(Long id, Product product) {
         ProductEntity productEntity = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto " +
-                        "no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Producto " + "no encontrado"));
         productEntity.setNombre(product.getNombre());
         productEntity.setPrecio(product.getPrecio());
         return toModel(productRepository.save(productEntity));
