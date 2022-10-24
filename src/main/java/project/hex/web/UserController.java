@@ -1,14 +1,19 @@
 package project.hex.web;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import project.hex.domains.User.User;
 import project.hex.domains.User.UserService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +37,7 @@ public class UserController {
 
     @GetMapping("/{usuario}")
     public String getUsuario(@PathVariable String usuario) {
-        return new Token().getJWTToken(usuario);
+        return getJWTToken(usuario);
     }
 
     @PostMapping
@@ -61,6 +66,29 @@ public class UserController {
                 .correo(userDTO.getCorreo())
                 .password(userDTO.getPassword())
                 .build();
+    }
+
+    private String getJWTToken(String username) {
+        String secretKey = "mySecretKey";
+        List<GrantedAuthority> grantedAuthorities = AuthorityUtils
+                .commaSeparatedStringToAuthorityList("ROLE_USER");
+
+        String token = Jwts
+                .builder()
+                .setId("softtekJWT")
+                .setSubject(username)
+                .claim("authorities",
+                        grantedAuthorities.stream()
+                                .map(GrantedAuthority::getAuthority)
+                                .collect(Collectors.toList()))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                // Token valido x 1 hora
+                .setExpiration(new Date(System.currentTimeMillis() + 3600000))
+                .signWith(SignatureAlgorithm.HS512,
+                        secretKey.getBytes())
+                .compact();
+
+        return "Bearer " + token;
     }
 
     @Data
