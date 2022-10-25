@@ -48,11 +48,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 .getBody();
     }
 
-    /**
-     * Authentication method in Spring flow
-     *
-     * @param claims
-     */
+
     private void setUpSpringAuthentication(Claims claims) {
         List<String> authorities = (List<String>) claims.get("authorities");
 

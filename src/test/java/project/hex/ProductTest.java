@@ -30,7 +30,6 @@ public class ProductTest {
     private MockMvc mockMvc;
     @MockBean
     private ProductRepository productRepository;
-
     @Autowired
     private ObjectMapper objectMapper;
 
